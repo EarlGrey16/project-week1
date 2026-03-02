@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 email: reservationForm.email.value,
                 phone: reservationForm.phone.value,
                 deviceType: reservationForm['device-type'].value,
+                reservationDate: reservationForm['reservation-date'].value,
                 problemDescription: reservationForm['problem-description'].value,
             };
 
