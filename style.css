@@ -1,12 +1,33 @@
-
 :root {
+    /* Light Mode Variables */
     --primary-color: #007bff;
     --secondary-color: #6c757d;
     --background-color: #f8f9fa;
-    --text-color: #333;
-    --border-color: #ddd;
+    --container-bg: #ffffff;
+    --text-color: #333333;
+    --heading-color: #007bff;
+    --border-color: #dddddd;
+    --input-bg: #ffffff;
+    --input-text: #333333;
+    --button-text: #ffffff;
     --success-color: #28a745;
     --error-color: #dc3545;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode {
+    /* Dark Mode Variables */
+    --primary-color: #3793ff;
+    --secondary-color: #adb5bd;
+    --background-color: #121212;
+    --container-bg: #1e1e1e;
+    --text-color: #e0e0e0;
+    --heading-color: #3793ff;
+    --border-color: #444444;
+    --input-bg: #2d2d2d;
+    --input-text: #ffffff;
+    --button-text: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.5);
 }
 
 body {
@@ -16,15 +37,17 @@ body {
     background-color: var(--background-color);
     margin: 0;
     padding: 20px;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
     max-width: 600px;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: var(--container-bg);
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px var(--shadow-color);
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 header {
@@ -32,10 +55,11 @@ header {
     margin-bottom: 30px;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 20px;
+    position: relative;
 }
 
 h1 {
-    color: var(--primary-color);
+    color: var(--heading-color);
     margin: 0;
     font-size: 2em;
 }
@@ -43,6 +67,30 @@ h1 {
 header p {
     color: var(--secondary-color);
     margin-top: 5px;
+}
+
+.theme-toggle-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#theme-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: var(--text-color);
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+#theme-toggle:hover {
+    background-color: var(--border-color);
 }
 
 .form-group {
@@ -65,7 +113,9 @@ textarea {
     border: 1px solid var(--border-color);
     border-radius: 6px;
     box-sizing: border-box;
-    transition: border-color 0.3s;
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
 }
 
 input[type="text"]:focus,
@@ -87,7 +137,7 @@ button[type="submit"] {
     padding: 15px;
     border: none;
     background-color: var(--primary-color);
-    color: #fff;
+    color: var(--button-text);
     font-size: 1.2em;
     font-weight: 600;
     border-radius: 6px;
@@ -100,6 +150,10 @@ button[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
+body.dark-mode button[type="submit"]:hover {
+    background-color: #55a4ff;
+}
+
 @media (max-width: 600px) {
     body {
         padding: 10px;
@@ -107,5 +161,12 @@ button[type="submit"]:hover {
 
     .container {
         padding: 20px;
+    }
+
+    .theme-toggle-container {
+        position: static;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
     }
 }
