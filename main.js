@@ -9,26 +9,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
             body.classList.add('dark-mode');
-            updateToggleUI(true);
+            themeToggle.checked = true;
         }
 
-        themeToggle.addEventListener('click', () => {
-            const isDarkMode = body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-            updateToggleUI(isDarkMode);
+        themeToggle.addEventListener('change', () => {
+            const isDarkMode = themeToggle.checked;
+            if (isDarkMode) {
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+            }
         });
-    }
-
-    function updateToggleUI(isDarkMode) {
-        const icon = themeToggle.querySelector('.icon');
-        const text = themeToggle.querySelector('.text');
-        if (isDarkMode) {
-            icon.textContent = '☀️';
-            text.textContent = 'Light Mode';
-        } else {
-            icon.textContent = '🌙';
-            text.textContent = 'Dark Mode';
-        }
     }
 
     // Form Submission Logic
