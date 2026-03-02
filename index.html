@@ -34,10 +34,47 @@
                 </div>
                 <div class="form-group">
                     <label for="device-type">Device Type</label>
-                    <select id="device-type" name="device-type">
+                    <select id="device-type" name="device-type" required>
+                        <option value="" disabled selected>Select Device</option>
                         <option value="phone">Phone</option>
                         <option value="computer">Computer</option>
                     </select>
+                </div>
+                
+                <div id="brand-group" class="form-group" style="display: none;">
+                    <label for="brand">Brand</label>
+                    <select id="brand" name="brand">
+                        <option value="" disabled selected>Select Brand</option>
+                        <option value="apple">Apple</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div id="series-group" class="form-group" style="display: none;">
+                    <label for="series">iPhone Series</label>
+                    <select id="series" name="series">
+                        <option value="" disabled selected>Select Series</option>
+                        <option value="iphone16">iPhone 16</option>
+                        <option value="iphone15">iPhone 15</option>
+                        <option value="iphone14">iPhone 14</option>
+                        <option value="iphone13">iPhone 13</option>
+                        <option value="iphone12">iPhone 12</option>
+                    </select>
+                </div>
+
+                <div id="model-group" class="form-group" style="display: none;">
+                    <label for="model">Model</label>
+                    <select id="model" name="model">
+                        <option value="" disabled selected>Select Model</option>
+                        <option value="normal">Normal</option>
+                        <option value="plus">Plus</option>
+                        <option value="pro">Pro</option>
+                        <option value="pro-max">Pro Max</option>
+                    </select>
+                </div>
+
+                <div id="inquiry-group" class="form-group inquiry-message" style="display: none;">
+                    <p>For other devices, please come in to our shop for a direct inquiry!</p>
                 </div>
                 <div class="form-group">
                     <label for="reservation-date">Preferred Date</label>

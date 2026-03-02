@@ -199,8 +199,23 @@ button[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
-body.dark-mode button[type="submit"]:hover {
-    background-color: #55a4ff;
+.inquiry-message {
+    background-color: #f1f8ff;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.inquiry-message p {
+    color: var(--text-color);
+    font-weight: 500;
+    margin: 0;
+}
+
+body.dark-mode .inquiry-message {
+    background-color: #1a2733;
+    border-left-color: var(--primary-color);
 }
 
 @media (max-width: 600px) {

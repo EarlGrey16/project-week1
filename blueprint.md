@@ -1,3 +1,4 @@
+
 # Tech Repair Reservations Website
 
 ## Overview
@@ -8,6 +9,7 @@ A simple, one-page website for users to book appointments for phone or computer 
 
 *   **Reservation Form:** A form to collect user information, device type, and problem description.
 *   **Dark Mode Toggle:** A button to switch between light and dark themes, with preference saved in local storage.
+*   **Dynamic Phone Selection:** Conditional sub-menus for brand, series, and model when "Phone" is selected.
 
 ## Design and Style
 
@@ -18,11 +20,11 @@ A simple, one-page website for users to book appointments for phone or computer 
 
 ## Plan for Current Request
 
-1.  **Modify `index.html`:** Change the theme toggle from a button to a switch-like structure (label, checkbox, and slider).
-2.  **Modify `style.css`:**
-    *   Position the theme toggle container in the top-right corner of the main container, ensuring it doesn't overlap with the header text.
-    *   Style the theme toggle as a sliding switch (left for light, right for dark).
-    *   Add icons or visual cues to the switch.
+1.  **Modify `index.html`:** Add hidden form groups for Brand, Series, and Model, and an inquiry message.
+2.  **Modify `style.css`:** Add styling for the inquiry message and ensure hidden elements are properly handled.
 3.  **Modify `main.js`:**
-    *   Update the theme toggle logic to work with a checkbox input.
-    *   Ensure the switch state (checked/unchecked) correctly reflects the active theme on page load.
+    *   Implement event listeners to show/hide the Brand selection when "Phone" is chosen.
+    *   Implement logic to show Series and Model selection if "Apple" is chosen.
+    *   Show an "Inquiry" message if "Other" is selected.
+    *   Ensure the form resets properly.
+4.  **Version Control:** Push and Deploy.
