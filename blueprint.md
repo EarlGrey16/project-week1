@@ -21,14 +21,12 @@ A simple, one-page website for users to book appointments for phone or computer 
 ## Plan for Current Request
 
 1.  **Modify `main.js`:**
-    *   Create a custom Web Component for the calendar (`<custom-calendar>`).
-    *   Implement logic within the component to render a monthly calendar view.
-    *   Disable (make unclickable and visually distinct) Saturday and Sunday dates.
-    *   Integrate the custom calendar with the existing reservation form.
-2.  **Modify `style.css`:**
-    *   Add styling for the custom calendar component, including styles for disabled dates, selected dates, and navigation.
-3.  **Modify `index.html`:**
-    *   Replace the standard `<input type="date">` with the new `<custom-calendar>` component.
-4.  **Verification:**
+    *   Use standard `<input type="date">` for date selection.
+    *   Implement validation logic to prevent weekend selections (Saturday and Sunday) via alerts and resetting the input.
+    *   Restrict the `min` attribute to the current date to prevent past bookings.
+    *   Cap the last available reservation slot at 5:00 PM (17:00).
+2.  **Modify `index.html`:**
+    *   Ensure the standard date input is used.
+3.  **Verification:**
     *   Ensure weekends cannot be selected.
-    *   Verify that selecting a weekday still updates the available time slots.
+    *   Verify that selecting a weekday updates the available time slots up to 5 PM.

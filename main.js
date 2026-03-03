@@ -1,221 +1,3 @@
-class CustomCalendar extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-        this.viewDate = new Date();
-        this.selectedDate = null;
-        this.minDate = new Date();
-        this.minDate.setHours(0, 0, 0, 0);
-    }
-
-    connectedCallback() {
-        this.render();
-    }
-
-    static get observedAttributes() {
-        return ['value'];
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (name === 'value' && newValue) {
-            this.selectedDate = new Date(newValue + 'T00:00:00');
-            this.viewDate = new Date(this.selectedDate);
-            this.render();
-        }
-    }
-
-    get value() {
-        return this.selectedDate ? this.selectedDate.toISOString().split('T')[0] : '';
-    }
-
-    set value(val) {
-        if (!val) {
-            this.selectedDate = null;
-        } else {
-            this.selectedDate = new Date(val + 'T00:00:00');
-            this.viewDate = new Date(this.selectedDate);
-        }
-        this.render();
-    }
-
-    prevMonth() {
-        this.viewDate.setMonth(this.viewDate.getMonth() - 1);
-        this.render();
-    }
-
-    nextMonth() {
-        this.viewDate.setMonth(this.viewDate.getMonth() + 1);
-        this.render();
-    }
-
-    selectDate(day) {
-        const date = new Date(this.viewDate.getFullYear(), this.viewDate.getMonth(), day);
-        const dayOfWeek = date.getDay();
-        
-        // Check if weekend (0=Sunday, 6=Saturday)
-        if (dayOfWeek === 0 || dayOfWeek === 6) return;
-        
-        // Check if in the past (before today)
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        if (date < today) return;
-
-        this.selectedDate = date;
-        this.render();
-        
-        this.dispatchEvent(new CustomEvent('change', {
-            detail: { value: this.value },
-            bubbles: true,
-            composed: true
-        }));
-    }
-
-    render() {
-        const year = this.viewDate.getFullYear();
-        const month = this.viewDate.getMonth();
-        const monthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(this.viewDate);
-        
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        this.shadowRoot.innerHTML = `
-        <style>
-            :host {
-                display: block;
-                font-family: inherit;
-                border: 1px solid var(--border-color);
-                border-radius: 8px;
-                padding: 15px;
-                background: var(--input-bg);
-                color: var(--input-text);
-                user-select: none;
-            }
-            .calendar-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 15px;
-            }
-            .calendar-header h3 {
-                margin: 0;
-                font-size: 1.1em;
-            }
-            .nav-btn {
-                background: none;
-                border: 1px solid var(--border-color);
-                color: var(--input-text);
-                padding: 5px 10px;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background 0.2s;
-            }
-            .nav-btn:hover {
-                background: var(--border-color);
-            }
-            .calendar-grid {
-                display: grid;
-                grid-template-columns: repeat(7, 1fr);
-                gap: 5px;
-            }
-            .day-label {
-                text-align: center;
-                font-weight: bold;
-                font-size: 0.8em;
-                color: var(--secondary-color);
-                padding-bottom: 5px;
-            }
-            .day {
-                aspect-ratio: 1;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                border-radius: 4px;
-                font-size: 0.9em;
-                transition: background 0.2s, color 0.2s;
-            }
-            .day:hover:not(.disabled):not(.selected) {
-                background: var(--border-color);
-            }
-            .day.disabled {
-                color: var(--secondary-color);
-                opacity: 0.3;
-                cursor: not-allowed;
-                background: rgba(0,0,0,0.05);
-            }
-            :host-context(body.dark-mode) .day.disabled {
-                background: rgba(255,255,255,0.05);
-            }
-            .day.selected {
-                background: var(--primary-color);
-                color: var(--button-text);
-                font-weight: bold;
-            }
-            .day.today {
-                border: 1px solid var(--primary-color);
-            }
-            .day.weekend {
-                background: rgba(0,0,0,0.03);
-            }
-            :host-context(body.dark-mode) .day.weekend {
-                background: rgba(255,255,255,0.03);
-            }
-        </style>
-        <div class="calendar-header">
-            <button class="nav-btn prev">&lt;</button>
-            <h3>${monthName} ${year}</h3>
-            <button class="nav-btn next">&gt;</button>
-        </div>
-        <div class="calendar-grid">
-            <div class="day-label">Su</div>
-            <div class="day-label">Mo</div>
-            <div class="day-label">Tu</div>
-            <div class="day-label">We</div>
-            <div class="day-label">Th</div>
-            <div class="day-label">Fr</div>
-            <div class="day-label">Sa</div>
-            ${this.generateDays(firstDay, daysInMonth, year, month, today)}
-        </div>
-        `;
-
-        this.shadowRoot.querySelector('.prev').onclick = () => this.prevMonth();
-        this.shadowRoot.querySelector('.next').onclick = () => this.nextMonth();
-        this.shadowRoot.querySelectorAll('.day:not(.disabled)').forEach(el => {
-            el.onclick = () => this.selectDate(parseInt(el.textContent));
-        });
-    }
-
-    generateDays(firstDay, daysInMonth, year, month, today) {
-        let html = '';
-        // Empty slots before first day
-        for (let i = 0; i < firstDay; i++) {
-            html += '<div class="empty"></div>';
-        }
-        
-        for (let i = 1; i <= daysInMonth; i++) {
-            const date = new Date(year, month, i);
-            const dayOfWeek = date.getDay();
-            const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
-            const isPast = date < today;
-            const isToday = date.getTime() === today.getTime();
-            const isSelected = this.selectedDate && date.getTime() === this.selectedDate.getTime();
-            
-            const classes = ['day'];
-            if (isWeekend || isPast) classes.push('disabled');
-            if (isWeekend) classes.push('weekend');
-            if (isToday) classes.push('today');
-            if (isSelected) classes.push('selected');
-            
-            html += `<div class="${classes.join(' ')}">${i}</div>`;
-        }
-        return html;
-    }
-}
-customElements.define('custom-calendar', CustomCalendar);
-
 document.addEventListener('DOMContentLoaded', () => {
     const reservationForm = document.getElementById('reservation-form');
     const themeToggle = document.getElementById('theme-toggle');
@@ -305,15 +87,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Date and Time Logic
-    const calendarPicker = document.getElementById('reservation-date-picker');
-    const reservationDateInput = document.getElementById('reservation-date');
+    const reservationDate = document.getElementById('reservation-date');
     const reservationTime = document.getElementById('reservation-time');
 
-    if (calendarPicker) {
-        calendarPicker.addEventListener('change', (e) => {
-            const dateValue = e.detail.value;
-            reservationDateInput.value = dateValue;
-            updateAvailableTimeSlots(dateValue);
+    if (reservationDate) {
+        // Set min date to today
+        const today = new Date().toISOString().split('T')[0];
+        reservationDate.setAttribute('min', today);
+
+        reservationDate.addEventListener('input', (e) => {
+            const dateVal = e.target.value;
+            if (!dateVal) return;
+
+            const date = new Date(dateVal);
+            const day = date.getUTCDay();
+
+            // Check if weekend (0 is Sunday, 6 is Saturday)
+            if (day === 0 || day === 6) {
+                alert('Reservations are only available on weekdays (Monday to Friday).');
+                e.target.value = '';
+                reservationTime.innerHTML = '<option value="" disabled selected>Select a date first</option>';
+            } else {
+                updateAvailableTimeSlots(dateVal);
+            }
         });
     }
 
@@ -354,11 +150,11 @@ document.addEventListener('DOMContentLoaded', () => {
         reservationForm.addEventListener('submit', (event) => {
             event.preventDefault();
 
-            const dateVal = reservationDateInput.value;
+            const dateVal = reservationDate.value;
             const timeVal = reservationForm['reservation-time'].value;
 
             if (!dateVal) {
-                alert('Please select a date from the calendar.');
+                alert('Please select a preferred date.');
                 return;
             }
 
@@ -385,8 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Your reservation for ${dateVal} at ${timeVal} has been successfully submitted!`);
             
             reservationForm.reset();
-            // Reset custom calendar
-            calendarPicker.value = '';
             // Reset visibility and time slots
             if (brandGroup) brandGroup.style.display = 'none';
             if (seriesGroup) seriesGroup.style.display = 'none';
@@ -396,4 +190,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
