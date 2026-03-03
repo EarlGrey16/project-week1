@@ -321,12 +321,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const allReservations = JSON.parse(localStorage.getItem('tech_reservations') || '[]');
         const bookedSlots = allReservations.filter(res => res.date === date).map(res => res.time);
 
+        // Get current time in Pacific Time
+        const now = new Date();
+        const pacificNow = new Date(now.toLocaleString("en-US", {timeZone: "America/Los_Angeles"}));
+        const currentYear = pacificNow.getFullYear();
+        const currentMonth = String(pacificNow.getMonth() + 1).padStart(2, '0');
+        const currentDate = String(pacificNow.getDate()).padStart(2, '0');
+        const todayString = `${currentYear}-${currentMonth}-${currentDate}`;
+        const currentHours = pacificNow.getHours();
+        const currentMinutes = pacificNow.getMinutes();
+
         slots.forEach(slot => {
+            const [hour, minute] = slot.split(':').map(Number);
             const option = document.createElement('option');
             const isBooked = bookedSlots.includes(slot);
+            
+            // Check if slot is in the past for today
+            let isPast = false;
+            if (date === todayString) {
+                if (hour < currentHours || (hour === currentHours && minute <= currentMinutes)) {
+                    isPast = true;
+                }
+            }
+
             option.value = slot;
-            option.textContent = slot + (isBooked ? ' (Taken)' : '');
-            if (isBooked) {
+            option.textContent = slot + (isBooked ? ' (Taken)' : '') + (isPast ? ' (Past)' : '');
+            
+            if (isBooked || isPast) {
                 option.disabled = true;
                 option.style.color = '#999';
             }
