@@ -305,17 +305,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateAvailableTimeSlots(date) {
         reservationTime.innerHTML = '<option value="" disabled selected>Select Time</option>';
         
-        // Final explicit list of time slots to prevent any loop logic confusion
-        // Strictly stops at 5:00 PM (17:00)
+        // 12-hour format slots with AM/PM
         const slots = [
-            '10:00', '10:30',
-            '11:00', '11:30',
-            '12:00', '12:30',
-            '13:00', '13:30',
-            '14:00', '14:30',
-            '15:00', '15:30',
-            '16:00', '16:30',
-            '17:00'
+            { label: '10:00 AM', hour: 10, minute: 0 },
+            { label: '10:30 AM', hour: 10, minute: 30 },
+            { label: '11:00 AM', hour: 11, minute: 0 },
+            { label: '11:30 AM', hour: 11, minute: 30 },
+            { label: '12:00 PM', hour: 12, minute: 0 },
+            { label: '12:30 PM', hour: 12, minute: 30 },
+            { label: '1:00 PM', hour: 13, minute: 0 },
+            { label: '1:30 PM', hour: 13, minute: 30 },
+            { label: '2:00 PM', hour: 14, minute: 0 },
+            { label: '2:30 PM', hour: 14, minute: 30 },
+            { label: '3:00 PM', hour: 15, minute: 0 },
+            { label: '3:30 PM', hour: 15, minute: 30 },
+            { label: '4:00 PM', hour: 16, minute: 0 },
+            { label: '4:30 PM', hour: 16, minute: 30 },
+            { label: '5:00 PM', hour: 17, minute: 0 }
         ];
 
         const allReservations = JSON.parse(localStorage.getItem('tech_reservations') || '[]');
@@ -332,20 +338,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentMinutes = pacificNow.getMinutes();
 
         slots.forEach(slot => {
-            const [hour, minute] = slot.split(':').map(Number);
             const option = document.createElement('option');
-            const isBooked = bookedSlots.includes(slot);
+            const isBooked = bookedSlots.includes(slot.label);
             
             // Check if slot is in the past for today
             let isPast = false;
             if (date === todayString) {
-                if (hour < currentHours || (hour === currentHours && minute <= currentMinutes)) {
+                if (slot.hour < currentHours || (slot.hour === currentHours && slot.minute <= currentMinutes)) {
                     isPast = true;
                 }
             }
 
-            option.value = slot;
-            option.textContent = slot + (isBooked ? ' (Taken)' : '') + (isPast ? ' (Past)' : '');
+            option.value = slot.label;
+            option.textContent = slot.label + (isBooked ? ' (Taken)' : '') + (isPast ? ' (Past)' : '');
             
             if (isBooked || isPast) {
                 option.disabled = true;
