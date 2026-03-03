@@ -66,9 +66,12 @@ header {
     max-width: 100%;
     width: 250px;
     height: auto;
-    border-radius: 0;
-    border: none;
+    border-radius: 0 !important;
+    border: none !important;
     box-shadow: 0 4px 12px var(--shadow-color);
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
 }
 
 h1 {
