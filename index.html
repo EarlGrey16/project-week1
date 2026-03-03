@@ -80,6 +80,12 @@
                     <label for="reservation-date">Preferred Date</label>
                     <input type="date" id="reservation-date" name="reservation-date" required>
                 </div>
+                <div id="time-group" class="form-group">
+                    <label for="reservation-time">Preferred Time</label>
+                    <select id="reservation-time" name="reservation-time" required>
+                        <option value="" disabled selected>Select a date first</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <label for="problem-description">Problem Description</label>
                     <textarea id="problem-description" name="problem-description" rows="5" required></textarea>
