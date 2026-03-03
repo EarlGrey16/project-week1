@@ -58,6 +58,18 @@ header {
     padding-bottom: 20px;
 }
 
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.main-logo {
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
 h1 {
     color: var(--heading-color);
     margin: 0;
