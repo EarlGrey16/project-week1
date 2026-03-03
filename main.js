@@ -304,11 +304,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateAvailableTimeSlots(date) {
         reservationTime.innerHTML = '<option value="" disabled selected>Select Time</option>';
-        const slots = [];
-        for (let hour = 10; hour < 17; hour++) {
-            slots.push(`${hour}:00`, `${hour}:30`);
-        }
-        slots.push('17:00');
+        
+        // Final explicit list of time slots to prevent any loop logic confusion
+        // Strictly stops at 5:00 PM (17:00)
+        const slots = [
+            '10:00', '10:30',
+            '11:00', '11:30',
+            '12:00', '12:30',
+            '13:00', '13:30',
+            '14:00', '14:30',
+            '15:00', '15:30',
+            '16:00', '16:30',
+            '17:00'
+        ];
 
         const allReservations = JSON.parse(localStorage.getItem('tech_reservations') || '[]');
         const bookedSlots = allReservations.filter(res => res.date === date).map(res => res.time);
