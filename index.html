@@ -77,8 +77,9 @@
                     <p>For other devices, please come in to our shop for a direct inquiry!</p>
                 </div>
                 <div class="form-group">
-                    <label for="reservation-date">Preferred Date</label>
-                    <input type="date" id="reservation-date" name="reservation-date" required>
+                    <label>Preferred Date</label>
+                    <custom-calendar id="reservation-date-picker"></custom-calendar>
+                    <input type="hidden" id="reservation-date" name="reservation-date" required>
                 </div>
                 <div id="time-group" class="form-group">
                     <label for="reservation-time">Preferred Time</label>
