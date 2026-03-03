@@ -91,6 +91,14 @@
                     <label for="problem-description">Problem Description</label>
                     <textarea id="problem-description" name="problem-description" rows="5" required></textarea>
                 </div>
+                <div class="form-group">
+                    <label for="photo-attachment">Attach a Photo (Optional)</label>
+                    <input type="file" id="photo-attachment" name="photo-attachment" accept="image/*">
+                    <div id="photo-preview" class="photo-preview" style="display: none;">
+                        <img id="preview-img" src="" alt="Photo preview">
+                        <button type="button" id="remove-photo" class="remove-photo-btn">&times;</button>
+                    </div>
+                </div>
                 <button type="submit">Book Appointment</button>
             </form>
         </main>

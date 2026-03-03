@@ -334,6 +334,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Photo Attachment Logic
+    const photoAttachment = document.getElementById('photo-attachment');
+    const photoPreview = document.getElementById('photo-preview');
+    const previewImg = document.getElementById('preview-img');
+    const removePhotoBtn = document.getElementById('remove-photo');
+    let attachedPhotoData = null;
+
+    if (photoAttachment) {
+        photoAttachment.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    attachedPhotoData = event.target.result;
+                    previewImg.src = attachedPhotoData;
+                    photoPreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    if (removePhotoBtn) {
+        removePhotoBtn.addEventListener('click', () => {
+            photoAttachment.value = '';
+            attachedPhotoData = null;
+            photoPreview.style.display = 'none';
+            previewImg.src = '';
+        });
+    }
+
     // Form Submission
     if (reservationForm) {
         reservationForm.addEventListener('submit', (event) => {
@@ -357,14 +388,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 date: dateVal,
                 time: timeVal,
                 problemDescription: reservationForm['problem-description'].value,
+                photo: attachedPhotoData, // Including the Base64 photo string
             };
 
             const allReservations = JSON.parse(localStorage.getItem('tech_reservations') || '[]');
             allReservations.push({ date: dateVal, time: timeVal });
             localStorage.setItem('tech_reservations', JSON.stringify(allReservations));
 
+            console.log('Reservation Data (with photo if provided):', formData);
+
             alert(`Your reservation for ${dateVal} at ${timeVal} has been successfully submitted!`);
             reservationForm.reset();
+            
+            // Reset additional UI elements
+            attachedPhotoData = null;
+            photoPreview.style.display = 'none';
+            previewImg.src = '';
+            
             calendarPicker.value = '';
             reservationDateInput.value = '';
             brandGroup.style.display = 'none';
